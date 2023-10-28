@@ -43,19 +43,19 @@ public class EmployeeServlet extends HttpServlet {
         else if (url.contains("add")) {
             add(req, resp);
         }
-//        else if (url.contains("edit")) {
-//            try {
-//                edit(req, resp);
-//            } catch (ParseException e) {
-//                throw new RuntimeException(e);
-//            }
-//        }
+        else if (url.contains("edit")) {
+            try {
+                edit(req, resp);
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
 //        else if (url.contains("update")) {
 //            update(req, resp);
 //        }
-//        else if (url.contains("delete")) {
-//            delete(req, resp);
-//        }
+        else if (url.contains("delete")) {
+            delete(req, resp);
+        }
 //        else if (url.contains("search")) {
 //            search(req, resp);
 //        }
@@ -70,29 +70,29 @@ public class EmployeeServlet extends HttpServlet {
     }
 
     private void getAll(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // Khoi tao danh sach du lieu
         List<Employee> employeeList = employeeDAO.findAll();
+        employeeList.sort((s1, s2) -> Integer.compare(s2.getId(), s1.getId()));
         req.setAttribute("employeeList", employeeList);
         req.getRequestDispatcher("/list.jsp").forward(req, resp);
 
     }
 
-//    private void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-//        int id = Integer.parseInt(req.getParameter("id"));
-//        employeeDAO.remove(id);
-//        resp.sendRedirect("/student/index");
-//    }
-//
-//    private void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, ParseException {
-//        Employee employee = employeeDAO.findId(Integer.parseInt(req.getParameter("id")));
-//        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
-//        Date date = inputFormat.parse(String.valueOf(employee.getBirthday()));
-//
-//        req.setAttribute("date", date);
-//        req.setAttribute("existingEmployee", employee);
-//        req.getRequestDispatcher("/studentForm.jsp").forward(req, resp);
-//    }
-//
+    private void delete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        employeeDAO.remove(id);
+        resp.sendRedirect("/employee/index");
+    }
+
+    private void edit(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException, ParseException {
+        Employee employee = employeeDAO.findId(Integer.parseInt(req.getParameter("id")));
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = inputFormat.parse(String.valueOf(employee.getBirthday()));
+
+        req.setAttribute("date", date);
+        req.setAttribute("employee", employee);
+        req.getRequestDispatcher("/employee.jsp").forward(req, resp);
+    }
+
 //    private void update(HttpServletRequest req, HttpServletResponse resp)  {
 //        try {
 //            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

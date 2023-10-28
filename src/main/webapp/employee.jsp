@@ -29,10 +29,6 @@
                         <a class="nav-link" aria-current="page" href="/employee/index">Home</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
             </div>
         </div>
     </nav>
@@ -47,7 +43,7 @@
         <input type="hidden" name="id" class="form-control" value="<c:out value='${employee.id}' />">
         <div class="col-md-4">
             <label for="fullname" class="form-label">Name:</label>
-            <input type="text" name="fullname" class="form-control" id="fullname" value="<c:out value='${employee.name}' />" required>
+            <input type="text" name="fullname" class="form-control" id="fullname" value="<c:out value='${employee.fullname}' />" required>
         </div>
         <div class="col-md-4">
             <label for="birthday" class="form-label">Birthday:</label>

@@ -34,7 +34,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public Employee findId(int id) {
-        return null;
+        return manager.find(Employee.class, id);
     }
 
     @Override
@@ -42,20 +42,31 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         try {
             transaction.begin();
             if (manager.find(employee.getClass(), employee.getId()) != null) {
-                manager.merge(employee); // Cập nhật đối tượng
+                manager.merge(employee);
             } else {
-                manager.persist(employee); // Tạo mới đối tượng
+                manager.persist(employee);
             }
             transaction.commit();
         } catch (Exception e) {
             transaction.rollback();
-            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
     @Override
     public void remove(int id) {
+        try {
+            transaction.begin();
+            Employee employee = manager.find(Employee.class, id);
+            if (employee != null) {
+                manager.remove(employee);
+            }
+            transaction.commit();
 
+        }catch (Exception e){
+            transaction.rollback();
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -64,7 +75,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public List<Employee> findByKeyWord(String keyword, String code) {
+    public List<Employee> findByKeyWord(String name, String code) {
         return null;
     }
 }
