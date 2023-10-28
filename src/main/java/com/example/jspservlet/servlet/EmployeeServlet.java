@@ -18,6 +18,8 @@ import java.util.List;
 
 @WebServlet({
         "/employee/index",
+        "/employee/search",
+        "/employee/search/*",
         "/employee/add",
         "/employee/create",
         "/employee/edit",
@@ -50,15 +52,15 @@ public class EmployeeServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
         }
-//        else if (url.contains("update")) {
-//            update(req, resp);
-//        }
+        else if (url.contains("update")) {
+            update(req, resp);
+        }
         else if (url.contains("delete")) {
             delete(req, resp);
         }
-//        else if (url.contains("search")) {
-//            search(req, resp);
-//        }
+        else if (url.contains("search")) {
+            search(req, resp);
+        }
         else {
             getAll(req, resp);
         }
@@ -93,21 +95,23 @@ public class EmployeeServlet extends HttpServlet {
         req.getRequestDispatcher("/employee.jsp").forward(req, resp);
     }
 
-//    private void update(HttpServletRequest req, HttpServletResponse resp)  {
-//        try {
-//            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//            Student student = new Student();
-//            student.setId(Integer.parseInt(req.getParameter("id")));
-//            student.setName(req.getParameter("name"));
-//            student.setCode(req.getParameter("code"));
-//            String birthday = req.getParameter("birthday");
-//            student.setBirthday(dateFormat.parse(birthday));
-//            studentDAO.save(student);
-//            resp.sendRedirect("/student/index");
-//        } catch (ParseException |IOException exception) {
-//            throw new RuntimeException(exception.getMessage());
-//        }
-//    }
+    private void update(HttpServletRequest req, HttpServletResponse resp)  {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Employee employee = new Employee();
+            employee.setId(Integer.parseInt(req.getParameter("id")));
+            employee.setFullname(req.getParameter("fullname"));
+            String birthday = req.getParameter("birthday");
+            employee.setBirthday(dateFormat.parse(birthday));
+            employee.setAddress(req.getParameter("address"));
+            employee.setPosition(req.getParameter("position"));
+            employee.setDepartment(req.getParameter("department"));
+            employeeDAO.save(employee);
+            resp.sendRedirect("/employee/index");
+        } catch (ParseException |IOException exception) {
+            throw new RuntimeException(exception.getMessage());
+        }
+    }
 
     private void add(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         req.getRequestDispatcher("/employee.jsp").forward(req, resp);
@@ -130,31 +134,16 @@ public class EmployeeServlet extends HttpServlet {
         }
     }
 
-//    private void search(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-//        List<Student> studentList = studentDAO.findByKeyWord(req.getParameter("keyword"), req.getParameter("code"));
-//        studentList.sort((s1, s2) -> Integer.compare(s2.getId(), s1.getId()));
-//
-//        // Tinh toan so luong trang va phan trang
-//        int totalItems = studentList.size();
-//        int itemsPerPage = 3;
-//        int totalPages = (int) Math.ceil((double) totalItems / itemsPerPage);
-//
-//
-//        // Lay tham so trang hien tai tu request
-//        String pageStr = req.getParameter("page");
-//        int currentPage = (pageStr == null) ? 1 : Integer.parseInt(pageStr);
-//
-//        // Tinh vi tri bat dau va ket thuc cua list item
-//        int startIndex = (currentPage - 1) * itemsPerPage;
-//        int endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-//
-//        // Chia nho danh sach item theo trang hien tai
-//        List<Student> students = studentList.subList(startIndex, endIndex);
-//
-//        // Đặt danh sách phân trang và các thông số cần thiết vào request
-//        req.setAttribute("students", students);
-//        req.setAttribute("totalPages", totalPages);
-//        req.setAttribute("currentPage", currentPage);
-//        req.getRequestDispatcher("/index.jsp").forward(req, resp);
-//    }
+    private void search(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        List<Employee> employeeList = employeeDAO.findByKeyWord(
+                req.getParameter("fullname"),
+                req.getParameter("address"),
+                req.getParameter("position"),
+                req.getParameter("department"));
+        employeeList.sort((s1, s2) -> Integer.compare(s2.getId(), s1.getId()));
+
+        // Đặt danh sách phân trang và các thông số cần thiết vào request
+        req.setAttribute("employeeList", employeeList);
+        req.getRequestDispatcher("/list.jsp").forward(req, resp);
+    }
 }

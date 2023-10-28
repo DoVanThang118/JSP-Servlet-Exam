@@ -27,8 +27,10 @@
                     </li>
                 </ul>
                 <form class="d-flex" role="search" action="/employee/search">
-                    <input class="form-control me-2" type="search" name="keyword" placeholder="Search Name" aria-label="Search Name">
-                    <input class="form-control me-2" type="search" name="code" placeholder="Search Code" aria-label="Search Code">
+                    <input class="form-control me-2" type="search" name="fullname" placeholder="Search FullName" aria-label="Search FullName">
+                    <input class="form-control me-2" type="search" name="address" placeholder="Search Address" aria-label="Search Address">
+                    <input class="form-control me-2" type="search" name="position" placeholder="Search Position" aria-label="Search Position">
+                    <input class="form-control me-2" type="search" name="department" placeholder="Search Department" aria-label="Search Department">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
             </div>

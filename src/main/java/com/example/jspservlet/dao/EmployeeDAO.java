@@ -10,5 +10,5 @@ public interface EmployeeDAO {
     void save(Employee employee);
     public void remove(int id);
     List<Employee> findPage(int page, int size);
-    List<Employee> findByKeyWord(String keyword, String code);
+    List<Employee> findByKeyWord(String fullname, String address, String position, String department);
 }

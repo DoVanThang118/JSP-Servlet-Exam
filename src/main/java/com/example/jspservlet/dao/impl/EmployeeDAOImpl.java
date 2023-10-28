@@ -8,6 +8,7 @@ import com.example.jspservlet.util.PersistenceUtil;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +76,17 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public List<Employee> findByKeyWord(String name, String code) {
-        return null;
+    public List<Employee> findByKeyWord(String fullname, String address, String position, String department) {
+        String queryString = "SELECT s FROM Employee s " +
+                "WHERE s.fullname LIKE :fullname " +
+                "and s.address like :address " +
+                "and s.position like :position " +
+                "and s.department like :department";
+        TypedQuery<Employee> query = manager.createQuery(queryString, Employee.class);
+        query.setParameter("fullname", "%" + fullname + "%");
+        query.setParameter("address", "%" + address + "%");
+        query.setParameter("position", "%" + position + "%");
+        query.setParameter("department", "%" + department + "%");
+        return query.getResultList();
     }
 }
